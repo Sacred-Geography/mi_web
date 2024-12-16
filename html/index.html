@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora Integral de Triángulos</title>
+    <link rel="stylesheet" href="dw.css"> <!-- Cambia aquí el nombre del archivo CSS -->
+</head>
+<body>
+    <div class="container">
+        <h1>CALCULADORA INTEGRAL DE TRIÁNGULOS</h1>
+        <h2>Análisis completo de un triángulo a partir de sus 3 lados</h2>
+        <form id="triangleForm">
+            <label for="sideA">Lado A:</label>
+            <input type="number" id="sideA" name="sideA" step="0.01" required>
+            <label for="sideB">Lado B:</label>
+            <input type="number" id="sideB" name="sideB" step="0.01" required>
+            <label for="sideC">Lado C:</label>
+            <input type="number" id="sideC" name="sideC" step="0.01" required>
+            <button type="submit">Calcular</button>
+        </form>
+        <div class="result" id="angles">
+            <h3>Ángulos:</h3>
+            <p id="anglesResult"></p>
+        </div>
+        <div class="result" id="medians">
+            <h3>Medianas:</h3>
+            <p id="mediansResult"></p>
+        </div>
+        <div class="result" id="bisectors">
+            <h3>Bisectrices:</h3>
+            <p id="bisectorsResult"></p>
+        </div>
+        <div class="result" id="heights">
+            <h3>Alturas:</h3>
+            <p id="heightsResult"></p>
+        </div>
+        <div class="result" id="perimeter">
+            <h3>Perímetro:</h3>
+            <p id="perimeterResult"></p>
+        </div>
+        <div class="result" id="area">
+            <h3>Área:</h3>
+            <p id="areaResult"></p>
+        </div>
+    </div>
+    <script>
+        document.getElementById('triangleForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const a = parseFloat(document.getElementById('sideA').value);
+            const b = parseFloat(document.getElementById('sideB').value);
+            const c = parseFloat(document.getElementById('sideC').value);
+
+            if (a + b <= c || a + c <= b || b + c <= a) {
+                document.getElementById('anglesResult').textContent = "Los lados no pueden formar un triángulo válido.";
+                return;
+            }
+
+            // Cálculo del perímetro
+            const perimeter = a + b + c;
+
+            // Cálculo del área
+            const s = perimeter / 2;
+            const area = Math.sqrt(s * (s - a) * (s - b) * (s - c));
+
+            // Cálculo de los ángulos en grados
+            const angleA = Math.acos((b * b + c * c - a * a) / (2 * b * c)) * (180 / Math.PI);
+            const angleB = Math.acos((a * a + c * c - b * b) / (2 * a * c)) * (180 / Math.PI);
+            const angleC = 180 - angleA - angleB;
+
+            // Cálculo de las medianas
+            const medianA = 0.5 * Math.sqrt(2 * (b * b + c * c) - a * a);
+            const medianB = 0.5 * Math.sqrt(2 * (a * a + c * c) - b * b);
+            const medianC = 0.5 * Math.sqrt(2 * (a * a + b * b) - c * c);
+
+            // Cálculo de las bisectrices
+            const bisectorA = (2 * b * c) / (b + c) * Math.cos(angleA / 2 * (Math.PI / 180));
+            const bisectorB = (2 * a * c) / (a + c) * Math.cos(angleB / 2 * (Math.PI / 180));
+            const bisectorC = (2 * a * b) / (a + b) * Math.cos(angleC / 2 * (Math.PI / 180));
+
+            // Cálculo de las alturas
+            const heightA = (2 * area) / a;
+            const heightB = (2 * area) / b;
+            const heightC = (2 * area) / c;
+
+            // Mostrar resultados
+            document.getElementById('anglesResult').innerHTML = `A: ${angleA.toFixed(2)}°, B: ${angleB.toFixed(2)}°, C: ${angleC.toFixed(2)}°`;
+            document.getElementById('mediansResult').innerHTML = `mA: ${medianA.toFixed(2)}, mB: ${medianB.toFixed(2)}, mC: ${medianC.toFixed(2)}`;
+            document.getElementById('bisectorsResult').innerHTML = `bA: ${bisectorA.toFixed(2)}, bB: ${bisectorB.toFixed(2)}, bC: ${bisectorC.toFixed(2)}`;
+            document.getElementById('heightsResult').innerHTML = `hA: ${heightA.toFixed(2)}, hB: ${heightB.toFixed(2)}, hC: ${heightC.toFixed(2)}`;
+            document.getElementById('perimeterResult').innerHTML = `${perimeter.toFixed(2)}`;
+            document.getElementById('areaResult').innerHTML = `${area.toFixed(2)}`;
+        });
+    </script>
+</body>
+</html>
